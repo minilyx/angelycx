@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Careers — Hot Beans Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0A0A0A;--surface:#111111;--card:#181818;--amber:#F5A623;--amber-dim:#C4841A;--text:#F0EDE8;--muted:#7A7570;--border:#252525}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(10,10,10,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.logo span{color:var(--amber)}
+.nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center}
+.nav-links a{font-size:.85rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-cta{background:var(--amber) !important;color:#000 !important;padding:.5rem 1.4rem !important;border-radius:4px;font-weight:600 !important}
+.nav-cta:hover{background:var(--amber-dim) !important;color:#000 !important}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.ham span{display:block;width:24px;height:2px;background:var(--text)}
+.mob{display:none;position:fixed;top:65px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:1.5rem 2rem;flex-direction:column;gap:1.2rem;z-index:199}
+.mob.open{display:flex}
+.mob a{font-size:.95rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-decoration:none;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.mob a:hover{color:var(--text)}
+
+.page-hero{padding:9rem 3.5rem 5rem;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.page-hero::before{content:'JOBS';position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:22vw;letter-spacing:.04em;color:rgba(245,166,35,.04);line-height:1;pointer-events:none;user-select:none}
+.ph-tag{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
+.ph-tag::before{content:'';width:24px;height:1.5px;background:var(--amber)}
+.page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,8rem);line-height:.9;letter-spacing:.02em;margin-bottom:2rem}
+.page-hero h1 .accent{color:var(--amber)}
+.ph-intro{max-width:640px;font-size:1.05rem;line-height:1.8;color:var(--muted)}
+.ph-intro strong{color:var(--text);font-weight:500}
+
+/* PERKS */
+.perks-section{padding:5rem 3.5rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.perks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:3rem}
+.perk{background:var(--surface);padding:2rem 1.8rem;transition:background .25s}
+.perk:hover{background:var(--card)}
+.perk-ico{font-size:1.8rem;margin-bottom:1rem}
+.perk-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.04em;margin-bottom:.5rem}
+.perk-desc{font-size:.82rem;line-height:1.7;color:var(--muted)}
+
+/* JOB LISTINGS */
+.jobs-section{padding:6rem 3.5rem}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);line-height:.95;letter-spacing:.03em;margin-bottom:1.5rem}
+.sec-title .accent{color:var(--amber)}
+.sec-body{font-size:.95rem;line-height:1.8;color:var(--muted);max-width:600px;margin-bottom:3rem}
+
+.job-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  margin-bottom:1.5rem;overflow:hidden;
+  transition:border-color .25s;
+}
+.job-card:hover{border-color:var(--amber)}
+.job-header{
+  padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;gap:1rem;
+}
+.job-left{flex:1}
+.job-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;margin-bottom:.4rem}
+.job-meta{display:flex;gap:1rem;flex-wrap:wrap}
+.jm{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+.jm-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0}
+.job-badge{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .9rem;border-radius:50px;background:rgba(245,166,35,.12);color:var(--amber);border:1px solid rgba(245,166,35,.25);white-space:nowrap}
+.job-toggle{font-size:1.4rem;color:var(--amber);transition:transform .3s;flex-shrink:0;font-family:'Bebas Neue',sans-serif}
+.job-toggle.open{transform:rotate(45deg)}
+.job-body{display:none;padding:0 2.5rem 2.5rem;border-top:1px solid var(--border)}
+.job-body.open{display:block}
+.jb-section{margin-top:1.8rem}
+.jb-heading{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.06em;color:var(--amber);margin-bottom:.9rem}
+.jb-text{font-size:.88rem;line-height:1.8;color:var(--muted);margin-bottom:.6rem}
+.jb-text strong{color:var(--text);font-weight:500}
+.jb-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.jb-list li{font-size:.87rem;line-height:1.6;color:var(--muted);padding-left:1.4rem;position:relative}
+.jb-list li::before{content:'→';position:absolute;left:0;color:var(--amber);font-size:.8rem}
+.jb-list li strong{color:var(--text);font-weight:500}
+.jb-quals{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.8rem}
+.qual-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem}
+.qual-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.3rem}
+.qual-val{font-size:.85rem;font-weight:500;color:var(--text)}
+.jb-apply{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.8rem 1.8rem;border-radius:4px;font-size:.85rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-amber{background:var(--amber);color:#000}
+.btn-amber:hover{background:var(--amber-dim);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+
+/* COURSES */
+.courses-section{padding:6rem 3.5rem;background:var(--surface)}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
+.cc:hover{border-color:var(--amber);transform:translateY(-4px)}
+.cc-provider{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.cc-name{font-weight:600;font-size:.98rem;line-height:1.4;margin-bottom:.6rem;flex:1}
+.cc-desc{font-size:.8rem;line-height:1.65;color:var(--muted);margin-bottom:1.2rem}
+.cc-meta{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.cc-tag{font-size:.67rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;background:rgba(245,166,35,.1);color:var(--amber);border:1px solid rgba(245,166,35,.2)}
+.cc-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.77rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);text-decoration:none;transition:gap .2s;margin-top:auto}
+.cc-link:hover{gap:.7rem}
+
+/* CTA */
+.cta-strip{padding:5rem 3.5rem;background:var(--amber);display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.cta-strip h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:.04em;color:#000;line-height:1.05}
+.cta-strip p{font-size:.88rem;color:rgba(0,0,0,.6);margin-top:.4rem}
+.btn-dark{background:#0A0A0A;color:var(--amber)}
+.btn-dark:hover{background:#1a1a1a;transform:translateY(-2px)}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 3.5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.ft{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.ft span{color:var(--amber)}
+.ft-tag{font-size:.82rem;color:var(--muted);margin-top:.4rem;line-height:1.6}
+.fnav{display:flex;gap:2rem;flex-wrap:wrap;justify-content:flex-end}
+.fnav a{font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.fnav a:hover{color:var(--text)}
+.fbot{grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.5rem;margin-top:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.75rem;color:var(--muted)}
+.fbot .amber{color:var(--amber)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .page-hero{padding:7rem 1.5rem 3rem}
+  .page-hero::before{display:none}
+  .perks-section,.jobs-section,.courses-section{padding:4rem 1.5rem}
+  .perks-grid{grid-template-columns:repeat(2,1fr)}
+  .cgrid{grid-template-columns:1fr}
+  .jb-quals{grid-template-columns:1fr}
+  .job-header{flex-wrap:wrap}
+  .cta-strip{padding:3rem 1.5rem}
+  footer{grid-template-columns:1fr}
+  .fnav{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Hot <span>Beans</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="careers.html" class="active">Careers</a></li>
+    <li><a href="apply.html" class="nav-cta">Apply Now</a></li>
+  </ul>
+  <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="careers.html">Careers</a>
+  <a href="apply.html">Apply Now</a>
+</div>
+
+<section class="page-hero">
+  <div class="ph-tag">Join The Team</div>
+  <h1>OPEN<br><span class="accent">ROLES.</span></h1>
+  <p class="ph-intro">We believe in <strong>hiring for potential, not just experience</strong>. If you've done the training, built some projects, and you've got the hunger to grow — we want to hear from you. Here's what we're looking for.</p>
+</section>
+
+<!-- PERKS -->
+<section class="perks-section">
+  <div class="eyebrow">Why Work Here</div>
+  <h2 class="sec-title">WHAT YOU <span class="accent">GET</span></h2>
+  <div class="perks-grid reveal">
+    <div class="perk"><div class="perk-ico">🎓</div><div class="perk-title">Paid Training</div><p class="perk-desc">We allocate dedicated time and budget for every developer to keep learning. Courses, conferences, books — all covered.</p></div>
+    <div class="perk"><div class="perk-ico">🤝</div><div class="perk-title">Real Mentorship</div><p class="perk-desc">Every junior gets a dedicated senior mentor. Pair programming, code reviews, and regular 1-to-1s are part of your week.</p></div>
+    <div class="perk"><div class="perk-ico">🚀</div><div class="perk-title">Real Projects</div><p class="perk-desc">No boring internal tools. From day one you'll be working on live client projects that real people use.</p></div>
+    <div class="perk"><div class="perk-ico">💷</div><div class="perk-title">Competitive Salary</div><p class="perk-desc">We pay fairly and review salaries annually. Clear progression paths mean your pay grows with your skills.</p></div>
+    <div class="perk"><div class="perk-ico">🏠</div><div class="perk-title">Flexible Working</div><p class="perk-desc">Hybrid model — 3 days in our UK studio, 2 days remote. We trust you to do great work wherever you are.</p></div>
+    <div class="perk"><div class="perk-ico">📈</div><div class="perk-title">Clear Progression</div><p class="perk-desc">Junior → Mid → Senior — a defined path with transparent criteria. We've promoted 100% of our trainees internally.</p></div>
+    <div class="perk"><div class="perk-ico">🧠</div><div class="perk-title">Team Knowledge Shares</div><p class="perk-desc">Weekly team demos and monthly "Hot Talks" — internal knowledge sharing sessions run by our own people.</p></div>
+    <div class="perk"><div class="perk-ico">🌱</div><div class="perk-title">Wellbeing Support</div><p class="perk-desc">Mental health days, flexible hours, no crunch culture. We build sustainable careers, not burnout.</p></div>
+  </div>
+</section>
+
+<!-- JOB LISTINGS -->
+<section class="jobs-section">
+  <div class="eyebrow">Open Positions</div>
+  <h2 class="sec-title">CURRENT <span class="accent">VACANCIES</span></h2>
+  <p class="sec-body">All roles are entry-to-junior level. We're looking for people who've completed relevant training or qualifications and are ready to start their professional career.</p>
+
+  <!-- JOB 1 -->
+  <div class="job-card reveal">
+    <div class="job-header" onclick="toggleJob('job1')">
+      <div class="job-left">
+        <div class="job-title">Junior Frontend Developer</div>
+        <div class="job-meta">
+          <span class="jm"><span class="jm-dot"></span>Full Time</span>
+          <span class="jm"><span class="jm-dot"></span>Hybrid — UK Studio</span>
+          <span class="jm"><span class="jm-dot"></span>£22,000 – £26,000</span>
+        </div>
+      </div>
+      <div class="job-badge">Now Hiring</div>
+      <div class="job-toggle" id="toggle-job1">+</div>
+    </div>
+    <div class="job-body" id="job1">
+      <div class="jb-section">
+        <div class="jb-heading">The Role</div>
+        <p class="jb-text">You'll be building and maintaining client-facing websites and web applications as part of our frontend team. Working closely with senior developers and designers, you'll write clean HTML, CSS and JavaScript and contribute to React-based projects.</p>
+        <p class="jb-text">This is a hands-on role from day one. You'll attend client briefings, participate in sprint planning, and have your code reviewed by experienced developers who want to help you grow.</p>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">Day-to-Day Responsibilities</div>
+        <ul class="jb-list">
+          <li>Building responsive, accessible web interfaces from design mockups</li>
+          <li>Writing semantic HTML5, modern CSS3 and vanilla JavaScript</li>
+          <li>Working with React components alongside senior developers</li>
+          <li>Using Git for version control and collaborating via pull requests</li>
+          <li>Debugging cross-browser issues and ensuring performance</li>
+          <li>Participating in daily stand-ups and sprint retrospectives</li>
+          <li>Writing basic unit tests and maintaining documentation</li>
+        </ul>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">Required Qualifications</div>
+        <div class="jb-quals">
+          <div class="qual-item"><div class="qual-label">Education (one of)</div><div class="qual-val">Level 3 IT / Web Development Diploma, BTec in Computing, A-Level Computer Science, or equivalent</div></div>
+          <div class="qual-item"><div class="qual-label">Alternative Routes</div><div class="qual-val">Coding bootcamp certificate, freeCodeCamp / Odin Project completion, or demonstrable self-taught portfolio</div></div>
+          <div class="qual-item"><div class="qual-label">Core Skills Required</div><div class="qual-val">HTML, CSS, JavaScript fundamentals, basic Git usage, understanding of responsive design</div></div>
+          <div class="qual-item"><div class="qual-label">Nice to Have</div><div class="qual-val">React basics, Figma/design tools, experience with any CSS framework, basic command line</div></div>
+        </div>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">What We're Really Looking For</div>
+        <ul class="jb-list">
+          <li><strong>Curiosity</strong> — you read documentation for fun and Google things obsessively</li>
+          <li><strong>A portfolio</strong> — even small personal projects show us how you think</li>
+          <li><strong>Communication skills</strong> — you can explain your thinking clearly</li>
+          <li><strong>Growth mindset</strong> — you see feedback as a gift, not a criticism</li>
+        </ul>
+      </div>
+      <div class="jb-apply">
+        <a href="apply.html?role=junior-frontend" class="btn btn-amber">Apply for This Role →</a>
+        <span style="font-size:.82rem;color:var(--muted)">Applications reviewed on a rolling basis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOB 2 -->
+  <div class="job-card reveal">
+    <div class="job-header" onclick="toggleJob('job2')">
+      <div class="job-left">
+        <div class="job-title">Trainee Full-Stack Developer</div>
+        <div class="job-meta">
+          <span class="jm"><span class="jm-dot"></span>Full Time</span>
+          <span class="jm"><span class="jm-dot"></span>Hybrid — UK Studio</span>
+          <span class="jm"><span class="jm-dot"></span>£20,000 – £24,000</span>
+        </div>
+      </div>
+      <div class="job-badge">Now Hiring</div>
+      <div class="job-toggle" id="toggle-job2">+</div>
+    </div>
+    <div class="job-body" id="job2">
+      <div class="jb-section">
+        <div class="jb-heading">The Role</div>
+        <p class="jb-text">Our trainee full-stack position is designed for people who are brand new to the industry but have demonstrated aptitude across both frontend and backend technologies. You'll rotate across different parts of our stack, getting exposure to everything from database queries to CSS animations.</p>
+        <p class="jb-text">You'll be paired with a senior mentor throughout and we expect this role to transition to a Mid Developer position within 18–24 months based on performance.</p>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">Day-to-Day Responsibilities</div>
+        <ul class="jb-list">
+          <li>Contributing to both frontend UI work and backend API development</li>
+          <li>Writing and querying SQL and NoSQL databases under supervision</li>
+          <li>Assisting in building RESTful APIs using Node.js or Python</li>
+          <li>Maintaining and debugging existing client applications</li>
+          <li>Writing and running basic test suites</li>
+          <li>Documenting your code and contributing to technical wikis</li>
+          <li>Shadowing senior developers in client calls and technical planning</li>
+        </ul>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">Required Qualifications</div>
+        <div class="jb-quals">
+          <div class="qual-item"><div class="qual-label">Education (one of)</div><div class="qual-val">HND/HNC in Computing, BSc Computer Science (2:2 or above), Level 4 Web Development qualification, or bootcamp certificate</div></div>
+          <div class="qual-item"><div class="qual-label">Alternative Routes</div><div class="qual-val">Strong self-taught portfolio covering both frontend and backend work. GitHub showing real projects considered</div></div>
+          <div class="qual-item"><div class="qual-label">Core Skills Required</div><div class="qual-val">HTML/CSS/JS, basic knowledge of at least one backend language (Node, Python, PHP), basic SQL</div></div>
+          <div class="qual-item"><div class="qual-label">Nice to Have</div><div class="qual-val">Any framework experience (Express, Flask, React), exposure to REST APIs, familiarity with Linux command line</div></div>
+        </div>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">What We're Really Looking For</div>
+        <ul class="jb-list">
+          <li><strong>Breadth of interest</strong> — you enjoy both front and back, or are actively learning both sides</li>
+          <li><strong>Problem solving</strong> — you don't give up when something breaks, you dig in</li>
+          <li><strong>A real portfolio</strong> — show us something you built, even if it's small</li>
+          <li><strong>Coachability</strong> — you absorb feedback and apply it quickly</li>
+        </ul>
+      </div>
+      <div class="jb-apply">
+        <a href="apply.html?role=trainee-fullstack" class="btn btn-amber">Apply for This Role →</a>
+        <span style="font-size:.82rem;color:var(--muted)">Applications reviewed on a rolling basis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOB 3 -->
+  <div class="job-card reveal">
+    <div class="job-header" onclick="toggleJob('job3')">
+      <div class="job-left">
+        <div class="job-title">Junior UI / CSS Developer</div>
+        <div class="job-meta">
+          <span class="jm"><span class="jm-dot"></span>Full Time</span>
+          <span class="jm"><span class="jm-dot"></span>Hybrid — UK Studio</span>
+          <span class="jm"><span class="jm-dot"></span>£21,000 – £25,000</span>
+        </div>
+      </div>
+      <div class="job-badge">Now Hiring</div>
+      <div class="job-toggle" id="toggle-job3">+</div>
+    </div>
+    <div class="job-body" id="job3">
+      <div class="jb-section">
+        <div class="jb-heading">The Role</div>
+        <p class="jb-text">If you obsess over pixel-perfect layouts, love CSS animations, and care deeply about how things look AND how accessible they are — this role is for you. You'll work closely with our design team to translate Figma mockups into beautiful, performant HTML/CSS.</p>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">Day-to-Day Responsibilities</div>
+        <ul class="jb-list">
+          <li>Translating design mockups into responsive HTML/CSS layouts</li>
+          <li>Building and maintaining a shared component library</li>
+          <li>Implementing CSS animations and micro-interactions</li>
+          <li>Running accessibility audits (WCAG compliance)</li>
+          <li>Cross-browser testing and visual QA</li>
+          <li>Collaborating with designers in Figma</li>
+        </ul>
+      </div>
+      <div class="jb-section">
+        <div class="jb-heading">Required Qualifications</div>
+        <div class="jb-quals">
+          <div class="qual-item"><div class="qual-label">Education (one of)</div><div class="qual-val">Any web/IT qualification at Level 3+, Graphic Design qualification with coding component, or equivalent experience</div></div>
+          <div class="qual-item"><div class="qual-label">Core Skills Required</div><div class="qual-val">Advanced HTML5, CSS3 (including Flexbox, Grid, animations), basic JavaScript, understanding of accessibility</div></div>
+          <div class="qual-item"><div class="qual-label">Nice to Have</div><div class="qual-val">Figma, Tailwind CSS, SASS/SCSS, any knowledge of WCAG standards, basic React or Vue</div></div>
+          <div class="qual-item"><div class="qual-label">Portfolio Essential</div><div class="qual-val">We must see examples of your CSS work. Codepen, GitHub, live sites — anything you've actually built</div></div>
+        </div>
+      </div>
+      <div class="jb-apply">
+        <a href="apply.html?role=junior-ui" class="btn btn-amber">Apply for This Role →</a>
+        <span style="font-size:.82rem;color:var(--muted)">Applications reviewed on a rolling basis</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="courses-section" id="courses">
+  <div class="eyebrow">Not Quite Ready? Get There.</div>
+  <h2 class="sec-title">RECOMMENDED <span class="accent">COURSES</span></h2>
+  <p class="sec-body" style="color:var(--muted)">These are the courses and platforms we recommend to prospective candidates. Complete one of these and you'll be well on your way to meeting our requirements.</p>
+  <div class="cgrid">
+    <div class="cc reveal">
+      <div class="cc-provider">freeCodeCamp — Free</div>
+      <div class="cc-name">Responsive Web Design Certification</div>
+      <p class="cc-desc">The gold standard free course for HTML and CSS. Covers everything from basic structure to CSS Grid and accessibility. Highly respected by employers.</p>
+      <div class="cc-meta"><span class="cc-tag">HTML</span><span class="cc-tag">CSS</span><span class="cc-tag">Accessibility</span><span class="cc-tag">Free</span></div>
+      <a href="https://www.freecodecamp.org/learn/2022/responsive-web-design/" target="_blank" class="cc-link">Start Learning →</a>
+    </div>
+    <div class="cc reveal">
+      <div class="cc-provider">The Odin Project — Free</div>
+      <div class="cc-name">Full Stack JavaScript Path</div>
+      <p class="cc-desc">A rigorous, project-based curriculum covering HTML, CSS, JavaScript, Node.js and React. Highly regarded in the industry and genuinely full-stack.</p>
+      <div class="cc-meta"><span class="cc-tag">Full Stack</span><span class="cc-tag">JavaScript</span><span class="cc-tag">Node.js</span><span class="cc-tag">Free</span></div>
+      <a href="https://www.theodinproject.com/paths/full-stack-javascript" target="_blank" class="cc-link">Start Learning →</a>
+    </div>
+    <div class="cc reveal">
+      <div class="cc-provider">Coursera — Paid</div>
+      <div class="cc-name">Meta Front-End Developer Professional Certificate</div>
+      <p class="cc-desc">An 9-course programme from Meta covering HTML, CSS, JavaScript and React. Comes with a recognised professional certificate on completion.</p>
+      <div class="cc-meta"><span class="cc-tag">React</span><span class="cc-tag">JavaScript</span><span class="cc-tag">Certificate</span></div>
+      <a href="https://www.coursera.org/professional-certificates/meta-front-end-developer" target="_blank" class="cc-link">Explore Course →</a>
+    </div>
+    <div class="cc reveal">
+      <div class="cc-provider">Udemy — Paid (often discounted)</div>
+      <div class="cc-name">The Complete Web Developer Bootcamp 2024</div>
+      <p class="cc-desc">One of the most comprehensive single-course options available. Covers HTML, CSS, JavaScript, Node, Express, React and MongoDB in one place.</p>
+      <div class="cc-meta"><span class="cc-tag">Full Stack</span><span class="cc-tag">Beginner Friendly</span><span class="cc-tag">Project Based</span></div>
+      <a href="https://www.udemy.com/course/the-complete-web-development-bootcamp/" target="_blank" class="cc-link">Explore Course →</a>
+    </div>
+    <div class="cc reveal">
+      <div class="cc-provider">Frontend Masters — Subscription</div>
+      <div class="cc-name">Complete Intro to Web Development v3</div>
+      <p class="cc-desc">Expert-led, in-depth courses by working developers. The Complete Intro covers fundamentals brilliantly and the platform has advanced courses to grow into.</p>
+      <div class="cc-meta"><span class="cc-tag">HTML</span><span class="cc-tag">CSS</span><span class="cc-tag">JavaScript</span><span class="cc-tag">Expert Taught</span></div>
+      <a href="https://frontendmasters.com/courses/web-development-v3/" target="_blank" class="cc-link">Explore Course →</a>
+    </div>
+    <div class="cc reveal">
+      <div class="cc-provider">W3Schools — Free</div>
+      <div class="cc-name">Web Development Tutorials &amp; Certifications</div>
+      <p class="cc-desc">The classic reference resource for web standards. Great for filling knowledge gaps, quick lookups and their paid certifications are widely recognised.</p>
+      <div class="cc-meta"><span class="cc-tag">Reference</span><span class="cc-tag">HTML</span><span class="cc-tag">CSS</span><span class="cc-tag">JavaScript</span></div>
+      <a href="https://www.w3schools.com/" target="_blank" class="cc-link">Start Learning →</a>
+    </div>
+  </div>
+</section>
+
+<div class="cta-strip">
+  <div>
+    <h2>DONE YOUR TRAINING?<br>LET'S TALK.</h2>
+    <p>We review every application personally. No automated rejections.</p>
+  </div>
+  <a href="apply.html" class="btn btn-dark" style="font-size:.9rem;padding:.9rem 2.2rem">Apply Now →</a>
+</div>
+
+<footer>
+  <div><a href="index.html" class="ft">Hot <span>Beans</span></a><p class="ft-tag">Crafting digital experiences that<br>refuse to be ordinary. Based in the UK.</p></div>
+  <nav class="fnav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="careers.html">Careers</a>
+    <a href="apply.html">Apply</a>
+  </nav>
+  <div class="fbot">
+    <span>© 2025 Hot Beans Web Ltd. All rights reserved.</span>
+    <span>Made with <span class="amber">♥</span> in the UK</span>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){document.getElementById('mob').classList.toggle('open')}
+function toggleJob(id){
+  const body=document.getElementById(id);
+  const toggle=document.getElementById('toggle-'+id);
+  const isOpen=body.classList.contains('open');
+  document.querySelectorAll('.job-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.job-toggle').forEach(t=>{t.classList.remove('open');t.textContent='+'});
+  if(!isOpen){body.classList.add('open');toggle.classList.add('open');toggle.textContent='+'}
+}
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('visible');obs.unobserve(el.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>

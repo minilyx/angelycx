@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>About Us — Hot Beans Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0A0A0A;--surface:#111111;--card:#181818;--amber:#F5A623;--amber-dim:#C4841A;--text:#F0EDE8;--muted:#7A7570;--border:#252525}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(10,10,10,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.logo span{color:var(--amber)}
+.nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center}
+.nav-links a{font-size:.85rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-cta{background:var(--amber) !important;color:#000 !important;padding:.5rem 1.4rem !important;border-radius:4px;font-weight:600 !important}
+.nav-cta:hover{background:var(--amber-dim) !important;color:#000 !important}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.ham span{display:block;width:24px;height:2px;background:var(--text)}
+.mob{display:none;position:fixed;top:65px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:1.5rem 2rem;flex-direction:column;gap:1.2rem;z-index:199}
+.mob.open{display:flex}
+.mob a{font-size:.95rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-decoration:none;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.mob a:hover{color:var(--text)}
+
+.page-hero{
+  padding:9rem 3.5rem 5rem;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.page-hero::before{
+  content:'ABOUT';
+  position:absolute;right:-2rem;top:50%;transform:translateY(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:22vw;letter-spacing:.04em;
+  color:rgba(245,166,35,.04);line-height:1;pointer-events:none;user-select:none;
+}
+.ph-tag{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
+.ph-tag::before{content:'';width:24px;height:1.5px;background:var(--amber)}
+.page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,8rem);line-height:.9;letter-spacing:.02em;margin-bottom:2rem}
+.page-hero h1 .accent{color:var(--amber)}
+.ph-intro{max-width:680px;font-size:1.05rem;line-height:1.8;color:var(--muted)}
+.ph-intro strong{color:var(--text);font-weight:500}
+
+/* STORY */
+.story-section{
+  padding:6rem 3.5rem;
+  display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;
+}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);line-height:.95;letter-spacing:.03em;margin-bottom:1.5rem}
+.sec-title .accent{color:var(--amber)}
+.body-text{font-size:.95rem;line-height:1.85;color:var(--muted);margin-bottom:1.2rem}
+.body-text strong{color:var(--text);font-weight:500}
+
+.story-cards{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.sc{background:var(--surface);padding:1.8rem 2rem;display:flex;gap:1.5rem;align-items:flex-start;transition:background .25s}
+.sc:hover{background:var(--card)}
+.sc-year{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;color:var(--amber);line-height:1;flex-shrink:0;width:72px}
+.sc-body{}
+.sc-title{font-weight:600;font-size:.95rem;margin-bottom:.35rem}
+.sc-desc{font-size:.82rem;line-height:1.7;color:var(--muted)}
+
+/* VALUES */
+.values-section{padding:6rem 3.5rem;background:var(--surface)}
+.vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:3rem}
+.vc{background:var(--surface);padding:2.2rem 1.8rem;transition:background .25s}
+.vc:hover{background:var(--card)}
+.vc-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(245,166,35,.18);line-height:1;margin-bottom:1rem}
+.vc-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:.6rem}
+.vc-desc{font-size:.82rem;line-height:1.7;color:var(--muted)}
+
+/* TEAM */
+.team-section{padding:6rem 3.5rem}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem;transition:border-color .25s,transform .25s}
+.tcard:hover{border-color:var(--amber);transform:translateY(-4px)}
+.tcard.trainee{border-left:3px solid var(--amber)}
+.avatar{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#000;margin-bottom:1.2rem}
+.av-amber{background:var(--amber)}
+.av-muted{background:#3A3530;color:var(--text)}
+.tname{font-weight:600;font-size:1rem;margin-bottom:.2rem}
+.trole{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.3rem}
+.tyears{font-size:.72rem;color:var(--muted);margin-bottom:.9rem}
+.tbio{font-size:.82rem;line-height:1.7;color:var(--muted)}
+.ptags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem}
+.tag{font-size:.67rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.22rem .6rem;border-radius:3px;background:rgba(245,166,35,.1);color:var(--amber);border:1px solid rgba(245,166,35,.2)}
+.trainee-badge{display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .7rem;background:rgba(245,166,35,.12);color:var(--amber);border:1px solid rgba(245,166,35,.25);border-radius:50px;margin-bottom:.8rem}
+
+/* CTA */
+.cta-strip{padding:5rem 3.5rem;background:var(--amber);display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.cta-strip h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:.04em;color:#000;line-height:1.05}
+.cta-strip p{font-size:.88rem;color:rgba(0,0,0,.6);margin-top:.4rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.85rem 2rem;border-radius:4px;font-size:.88rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-dark{background:#0A0A0A;color:var(--amber)}
+.btn-dark:hover{background:#1a1a1a;transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 3.5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.ft{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.ft span{color:var(--amber)}
+.ft-tag{font-size:.82rem;color:var(--muted);margin-top:.4rem;line-height:1.6}
+.fnav{display:flex;gap:2rem;flex-wrap:wrap;justify-content:flex-end}
+.fnav a{font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.fnav a:hover{color:var(--text)}
+.fbot{grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.5rem;margin-top:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.75rem;color:var(--muted)}
+.fbot .amber{color:var(--amber)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .page-hero{padding:7rem 1.5rem 3rem}
+  .page-hero::before{display:none}
+  .story-section{grid-template-columns:1fr;gap:3rem;padding:4rem 1.5rem}
+  .vgrid{grid-template-columns:repeat(2,1fr)}
+  .values-section{padding:4rem 1.5rem}
+  .team-section{padding:4rem 1.5rem}
+  .team-grid{grid-template-columns:1fr}
+  .cta-strip{padding:3rem 1.5rem}
+  footer{grid-template-columns:1fr}
+  .fnav{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Hot <span>Beans</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="careers.html">Careers</a></li>
+    <li><a href="apply.html" class="nav-cta">Apply Now</a></li>
+  </ul>
+  <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="careers.html">Careers</a>
+  <a href="apply.html">Apply Now</a>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="ph-tag">Our Story</div>
+  <h1>WE ARE<br><span class="accent">HOT BEANS.</span></h1>
+  <p class="ph-intro">Founded in 2012, Hot Beans Web is a <strong>UK-based digital studio</strong> obsessed with building exceptional web experiences. We're not a faceless corporation — we're a tight-knit team of developers, designers, and digital strategists who genuinely love what we do.</p>
+</section>
+
+<!-- COMPANY STORY -->
+<section class="story-section">
+  <div>
+    <div class="eyebrow">Company Profile</div>
+    <h2 class="sec-title">WHO WE<br><span class="accent">REALLY ARE</span></h2>
+    <p class="body-text">Hot Beans Web was born out of a <strong>shared frustration</strong> — too many agencies building mediocre websites for maximum profit. Our founders, two university friends with a laptop and a rented desk, decided to do things differently.</p>
+    <p class="body-text">Today we're a team of 18 people working across web design, development, digital strategy and content. We work with <strong>start-ups, SMEs and established brands</strong> across the UK and Europe, helping them build digital products that actually work — and actually look great.</p>
+    <p class="body-text">Our culture is built on <strong>continuous learning</strong>. We actively recruit talented people who are new to the industry and invest heavily in training them up. Several of our senior developers started as trainees right here.</p>
+    <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap">
+      <a href="careers.html" class="btn btn-ghost" style="display:inline-flex">View Open Roles</a>
+      <a href="apply.html" class="btn" style="background:var(--amber);color:#000;display:inline-flex">Apply Now</a>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="story-cards">
+      <div class="sc"><div class="sc-year">2012</div><div class="sc-body"><div class="sc-title">Founded in a Shared Office</div><p class="sc-desc">Two developers, one shared desk, and a big idea. Hot Beans Web opens its doors with its first client — a local restaurant needing a website.</p></div></div>
+      <div class="sc"><div class="sc-year">2015</div><div class="sc-body"><div class="sc-title">First Major Enterprise Client</div><p class="sc-desc">Landed our first big contract with a national retail chain. Team grows to 6 people and we move into a proper studio.</p></div></div>
+      <div class="sc"><div class="sc-year">2018</div><div class="sc-body"><div class="sc-title">Trainee Programme Launched</div><p class="sc-desc">We formalise our junior hire programme, bringing in developers fresh from courses and qualifications. Four trainees hired in year one.</p></div></div>
+      <div class="sc"><div class="sc-year">2021</div><div class="sc-body"><div class="sc-title">18-Strong Team &amp; Going Strong</div><p class="sc-desc">200+ projects delivered. Clients across the UK, France, and Germany. Still obsessed with quality, still hiring brilliant new talent.</p></div></div>
+      <div class="sc"><div class="sc-year">NOW</div><div class="sc-body"><div class="sc-title">We're Hiring — That Means You</div><p class="sc-desc">We're growing again and actively looking for junior developers with hunger, curiosity, and the drive to build great things.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="eyebrow">What We Stand For</div>
+  <h2 class="sec-title">OUR <span class="accent">VALUES</span></h2>
+  <div class="vgrid reveal">
+    <div class="vc"><div class="vc-num">01</div><div class="vc-title">Quality First</div><p class="vc-desc">We'd rather take longer and do it right than ship something average. Every line of code matters.</p></div>
+    <div class="vc"><div class="vc-num">02</div><div class="vc-title">Never Stop Learning</div><p class="vc-desc">The web changes fast. We actively invest in our team's growth through courses, conferences, and time to experiment.</p></div>
+    <div class="vc"><div class="vc-num">03</div><div class="vc-title">Be Honest</div><p class="vc-desc">With clients. With each other. We call things as they are and build trust through transparency.</p></div>
+    <div class="vc"><div class="vc-num">04</div><div class="vc-title">Collaborate Always</div><p class="vc-desc">No lone wolves here. Our best work happens when people bring different perspectives to the same problem.</p></div>
+  </div>
+</section>
+
+<!-- FULL TEAM -->
+<section class="team-section" id="team">
+  <div class="eyebrow">The Team</div>
+  <h2 class="sec-title">MEET THE<br><span class="accent">HUMANS</span></h2>
+  <div class="team-grid">
+
+    <!-- Senior team -->
+    <div class="tcard reveal">
+      <div class="avatar av-muted">KP</div>
+      <div class="tname">Karen Patel</div>
+      <div class="trole">Co-Founder &amp; CEO</div>
+      <div class="tyears">13 years at Hot Beans</div>
+      <p class="tbio">Full-stack developer turned studio lead. Karen still codes on weekends just for fun. She's obsessed with user experience and building teams that care.</p>
+      <div class="ptags"><span class="tag">Leadership</span><span class="tag">Strategy</span><span class="tag">React</span></div>
+    </div>
+    <div class="tcard reveal">
+      <div class="avatar av-muted">DL</div>
+      <div class="tname">Dan Lowe</div>
+      <div class="trole">Co-Founder &amp; CTO</div>
+      <div class="tyears">13 years at Hot Beans</div>
+      <p class="tbio">Back-end engineer with a love for clean architecture and scalable systems. Dan built most of our internal tools and still reviews every major technical decision.</p>
+      <div class="ptags"><span class="tag">Node.js</span><span class="tag">AWS</span><span class="tag">System Design</span></div>
+    </div>
+    <div class="tcard reveal">
+      <div class="avatar av-muted">AS</div>
+      <div class="tname">Aisha Summers</div>
+      <div class="trole">Lead Designer</div>
+      <div class="tyears">7 years at Hot Beans</div>
+      <p class="tbio">Design-systems thinker and brand nerd. Aisha bridges the gap between aesthetics and functionality better than anyone we know.</p>
+      <div class="ptags"><span class="tag">Figma</span><span class="tag">CSS</span><span class="tag">Branding</span></div>
+    </div>
+    <div class="tcard reveal">
+      <div class="avatar av-muted">TW</div>
+      <div class="tname">Tom Walsh</div>
+      <div class="trole">Senior Frontend Developer</div>
+      <div class="tyears">5 years at Hot Beans</div>
+      <p class="tbio">Started as a junior hire. Now leads our frontend guild and mentors every new developer who joins the team. Vue and React expert.</p>
+      <div class="ptags"><span class="tag">Vue</span><span class="tag">React</span><span class="tag">TypeScript</span></div>
+    </div>
+
+    <!-- Trainees -->
+    <div class="tcard trainee reveal">
+      <div class="trainee-badge">✦ Trainee Developer</div>
+      <div class="avatar av-amber">JR</div>
+      <div class="tname">Jamie Rhodes</div>
+      <div class="trole">Junior Frontend Developer</div>
+      <div class="tyears">1.5 years at Hot Beans</div>
+      <p class="tbio">Joined after completing a Level 3 IT &amp; Web Development diploma. Now building React components for live client projects every single day. "Everyone here actually wants you to succeed."</p>
+      <div class="ptags"><span class="tag">React</span><span class="tag">CSS</span><span class="tag">Git</span></div>
+    </div>
+    <div class="tcard trainee reveal">
+      <div class="trainee-badge">✦ Trainee Developer</div>
+      <div class="avatar av-amber">SC</div>
+      <div class="tname">Sofia Chen</div>
+      <div class="trole">Trainee Full-Stack Dev</div>
+      <div class="tyears">1 year at Hot Beans</div>
+      <p class="tbio">Self-taught developer who applied with a portfolio and a lot of determination. She now handles API integration, database queries and responsive layouts across real client work.</p>
+      <div class="ptags"><span class="tag">Node.js</span><span class="tag">HTML/CSS</span><span class="tag">SQL</span></div>
+    </div>
+    <div class="tcard trainee reveal">
+      <div class="trainee-badge">✦ Trainee Developer</div>
+      <div class="avatar av-amber">MO</div>
+      <div class="tname">Marcus O'Brien</div>
+      <div class="trole">Junior Backend Developer</div>
+      <div class="tyears">8 months at Hot Beans</div>
+      <p class="tbio">Career-changer from graphic design who completed a Python bootcamp. Proof that if you've got the drive and the skills, we will give you the opportunity. Now writes APIs used by thousands daily.</p>
+      <div class="ptags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">AWS</span></div>
+    </div>
+    <div class="tcard trainee reveal">
+      <div class="trainee-badge">✦ Trainee Developer</div>
+      <div class="avatar av-amber">PH</div>
+      <div class="tname">Priya Hutchins</div>
+      <div class="trole">Junior UI Developer</div>
+      <div class="tyears">6 months at Hot Beans</div>
+      <p class="tbio">Came in with a Computer Science degree and a passion for beautiful interfaces. She's quickly become our go-to for accessibility and CSS animation work.</p>
+      <div class="ptags"><span class="tag">CSS</span><span class="tag">Accessibility</span><span class="tag">JavaScript</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div>
+    <h2>THINK YOU'D FIT IN HERE?</h2>
+    <p>We're actively hiring junior and trainee web developers right now.</p>
+  </div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap">
+    <a href="careers.html" class="btn btn-dark">See Open Roles</a>
+    <a href="apply.html" class="btn" style="background:rgba(0,0,0,.15);color:#000;border:2px solid rgba(0,0,0,.2)">Apply Now</a>
+  </div>
+</div>
+
+<footer>
+  <div><a href="index.html" class="ft">Hot <span>Beans</span></a><p class="ft-tag">Crafting digital experiences that<br>refuse to be ordinary. Based in the UK.</p></div>
+  <nav class="fnav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="careers.html">Careers</a>
+    <a href="apply.html">Apply</a>
+  </nav>
+  <div class="fbot">
+    <span>© 2025 Hot Beans Web Ltd. All rights reserved.</span>
+    <span>Made with <span class="amber">♥</span> in the UK</span>
+  </div>
+</footer>
+<script>
+function toggleMenu(){document.getElementById('mob').classList.toggle('open')}
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('visible');obs.unobserve(el.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>

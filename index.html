@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Hot Beans — Web Development Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0A;
+  --surface:#111111;
+  --card:#181818;
+  --amber:#F5A623;
+  --amber-dim:#C4841A;
+  --text:#F0EDE8;
+  --muted:#7A7570;
+  --border:#252525;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 3.5rem;
+  background:rgba(10,10,10,0.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.06em;color:var(--text);text-decoration:none}
+.logo span{color:var(--amber)}
+.nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center}
+.nav-links a{font-size:.85rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-cta{background:var(--amber) !important;color:#000 !important;padding:.5rem 1.4rem !important;border-radius:4px;font-weight:600 !important}
+.nav-cta:hover{background:var(--amber-dim) !important;color:#000 !important}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.ham span{display:block;width:24px;height:2px;background:var(--text);transition:.3s}
+.mob{display:none;position:fixed;top:65px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:1.5rem 2rem;flex-direction:column;gap:1.2rem;z-index:199}
+.mob.open{display:flex}
+.mob a{font-size:.95rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-decoration:none;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.mob a:hover{color:var(--text)}
+
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:7rem 3.5rem 4rem;position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;top:-20%;right:-10%;width:60vw;height:60vw;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,0.1) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:1.8rem;
+  opacity:0;animation:fadeUp .8s .2s forwards;
+}
+.hero-tag::before{content:'';width:24px;height:1.5px;background:var(--amber)}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5rem,13vw,12rem);
+  line-height:.88;letter-spacing:0.02em;margin-bottom:2.5rem;
+  opacity:0;animation:fadeUp .9s .35s forwards;
+}
+.hero h1 .amber{color:var(--amber)}
+.hero-sub{
+  max-width:560px;font-size:1.05rem;line-height:1.75;color:var(--muted);margin-bottom:3rem;
+  opacity:0;animation:fadeUp .9s .5s forwards;
+}
+.hero-sub strong{color:var(--text);font-weight:500}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp .9s .65s forwards}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.85rem 2rem;border-radius:4px;font-size:.88rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-amber{background:var(--amber);color:#000;box-shadow:0 6px 24px rgba(245,166,35,.28)}
+.btn-amber:hover{background:var(--amber-dim);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+.hero-scroll{
+  position:absolute;bottom:2.5rem;left:3.5rem;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:.8rem;
+  opacity:0;animation:fadeUp .9s .9s forwards;
+}
+.hero-scroll::before{content:'';width:40px;height:1px;background:var(--muted)}
+
+.stats-bar{
+  background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.stat{padding:2rem 2.5rem;border-right:1px solid var(--border);transition:background .25s}
+.stat:last-child{border-right:none}
+.stat:hover{background:var(--card)}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.04em;color:var(--amber);line-height:1;margin-bottom:.3rem}
+.stat-l{font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.section{padding:6rem 3.5rem}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4.5rem);line-height:.95;letter-spacing:.03em;margin-bottom:1.5rem}
+.sec-title .accent{color:var(--amber)}
+.sec-body{font-size:.95rem;line-height:1.8;color:var(--muted);max-width:550px;margin-bottom:3rem}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.svc{background:var(--surface);padding:2.2rem 2rem;transition:background .25s}
+.svc:hover{background:var(--card)}
+.svc-ico{font-size:1.8rem;margin-bottom:1.2rem}
+.svc-t{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:.6rem}
+.svc-d{font-size:.83rem;line-height:1.7;color:var(--muted)}
+
+.profiles-sec{padding:6rem 3.5rem;background:var(--surface)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem;transition:border-color .25s,transform .25s}
+.pcard:hover{border-color:var(--amber);transform:translateY(-4px)}
+.avatar{width:54px;height:54px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#000;margin-bottom:1.2rem}
+.pname{font-weight:600;font-size:1rem;margin-bottom:.2rem}
+.prole{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.9rem}
+.pbio{font-size:.82rem;line-height:1.7;color:var(--muted)}
+.ptags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem}
+.tag{font-size:.67rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.22rem .6rem;border-radius:3px;background:rgba(245,166,35,.1);color:var(--amber);border:1px solid rgba(245,166,35,.2)}
+
+.cta-strip{padding:5rem 3.5rem;background:var(--amber);display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.cta-strip h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:.04em;color:#000;line-height:1.05}
+.cta-strip p{font-size:.88rem;color:rgba(0,0,0,.6);margin-top:.4rem}
+.btn-dark{background:#0A0A0A;color:var(--amber)}
+.btn-dark:hover{background:#1a1a1a;transform:translateY(-2px)}
+
+.courses-sec{padding:6rem 3.5rem}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.8rem;display:flex;flex-direction:column;transition:border-color .25s}
+.cc:hover{border-color:var(--amber)}
+.cprov{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.cname{font-weight:600;font-size:.95rem;line-height:1.4;margin-bottom:.8rem;flex:1}
+.clink{display:inline-flex;align-items:center;gap:.4rem;font-size:.77rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);text-decoration:none;transition:gap .2s;margin-top:auto}
+.clink:hover{gap:.7rem}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 3.5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.ft{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.ft span{color:var(--amber)}
+.ft-tag{font-size:.82rem;color:var(--muted);margin-top:.4rem;line-height:1.6}
+.fnav{display:flex;gap:2rem;flex-wrap:wrap;justify-content:flex-end}
+.fnav a{font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.fnav a:hover{color:var(--text)}
+.fbot{grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.5rem;margin-top:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.75rem;color:var(--muted)}
+.fbot .amber{color:var(--amber)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .hero{padding:6rem 1.5rem 3rem}
+  .hero-scroll{display:none}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .grid3,.pgrid,.cgrid{grid-template-columns:1fr}
+  .section,.profiles-sec,.courses-sec{padding:4rem 1.5rem}
+  .cta-strip{padding:3rem 1.5rem}
+  footer{grid-template-columns:1fr}
+  .fnav{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Hot <span>Beans</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="careers.html">Careers</a></li>
+    <li><a href="apply.html" class="nav-cta">Apply Now</a></li>
+  </ul>
+  <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="careers.html">Careers</a>
+  <a href="apply.html">Apply Now</a>
+</div>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-tag">Now Hiring — Junior &amp; Trainee Developers</div>
+  <h1>HOT<br><span class="amber">BEANS</span><br>WEB.</h1>
+  <p class="hero-sub">We build <strong>bold digital experiences</strong> for brands that refuse to be average. We're growing fast and looking for talented developers ready to do the best work of their careers.</p>
+  <div class="hero-btns">
+    <a href="careers.html" class="btn btn-amber">View Open Roles →</a>
+    <a href="about.html" class="btn btn-ghost">Who We Are</a>
+  </div>
+  <div class="hero-scroll">Scroll to explore</div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat reveal"><div class="stat-n">12+</div><div class="stat-l">Years in Business</div></div>
+  <div class="stat reveal"><div class="stat-n">200+</div><div class="stat-l">Projects Delivered</div></div>
+  <div class="stat reveal"><div class="stat-n">18</div><div class="stat-l">Team Members</div></div>
+  <div class="stat reveal"><div class="stat-n">98%</div><div class="stat-l">Client Retention</div></div>
+</div>
+
+<section class="section">
+  <div class="eyebrow">What We Do</div>
+  <h2 class="sec-title">CRAFTING THE WEB,<br><span class="accent">ONE PIXEL AT A TIME</span></h2>
+  <p class="sec-body">Hot Beans is a full-service web development studio. From pixel-perfect frontends to robust backend systems — we do it all with obsessive attention to quality.</p>
+  <div class="grid3 reveal">
+    <div class="svc"><div class="svc-ico">🎨</div><div class="svc-t">UI &amp; UX Design</div><p class="svc-d">Beautiful, intuitive interfaces designed with real users in mind. We turn wireframes into experiences people love.</p></div>
+    <div class="svc"><div class="svc-ico">⚙️</div><div class="svc-t">Frontend Dev</div><p class="svc-d">React, Vue, vanilla JS — we write clean, performant code that works on every device and browser.</p></div>
+    <div class="svc"><div class="svc-ico">🗄️</div><div class="svc-t">Backend &amp; APIs</div><p class="svc-d">Node, Python, databases, REST and GraphQL APIs. We build the engines that power every experience.</p></div>
+    <div class="svc"><div class="svc-ico">🛒</div><div class="svc-t">E-Commerce</div><p class="svc-d">Shopify, WooCommerce, custom carts. We build stores that turn browsers into loyal buyers.</p></div>
+    <div class="svc"><div class="svc-ico">☁️</div><div class="svc-t">Cloud &amp; DevOps</div><p class="svc-d">AWS, Azure, CI/CD pipelines. We deploy, monitor, and scale with full confidence.</p></div>
+    <div class="svc"><div class="svc-ico">📱</div><div class="svc-t">Mobile-First</div><p class="svc-d">Every build starts on mobile. Progressive Web Apps and responsive design are non-negotiable.</p></div>
+  </div>
+</section>
+
+<section class="profiles-sec">
+  <div class="eyebrow">Our Trainee Developers</div>
+  <h2 class="sec-title">PEOPLE WHO STARTED<br><span class="accent">JUST LIKE YOU</span></h2>
+  <div class="pgrid">
+    <div class="pcard reveal">
+      <div class="avatar">JR</div>
+      <div class="pname">Jamie Rhodes</div>
+      <div class="prole">Junior Frontend Developer</div>
+      <p class="pbio">Joined Hot Beans after completing a Level 3 Web Development diploma. Now building React components for live client projects. "Best decision I ever made."</p>
+      <div class="ptags"><span class="tag">React</span><span class="tag">CSS</span><span class="tag">Git</span></div>
+    </div>
+    <div class="pcard reveal">
+      <div class="avatar">SC</div>
+      <div class="pname">Sofia Chen</div>
+      <div class="prole">Trainee Full-Stack Dev</div>
+      <p class="pbio">Self-taught developer who landed her first industry role here. Handles everything from API integration to pixel-perfect responsive layouts across live projects.</p>
+      <div class="ptags"><span class="tag">Node.js</span><span class="tag">HTML</span><span class="tag">SQL</span></div>
+    </div>
+    <div class="pcard reveal">
+      <div class="avatar">MO</div>
+      <div class="pname">Marcus O'Brien</div>
+      <div class="prole">Junior Backend Developer</div>
+      <p class="pbio">Career changer from graphic design. Completed a coding bootcamp and now writes Python APIs that serve thousands of daily requests. Proof anyone can make it.</p>
+      <div class="ptags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">AWS</span></div>
+    </div>
+  </div>
+  <div style="margin-top:2.5rem;text-align:center"><a href="about.html" class="btn btn-ghost">Meet the Full Team</a></div>
+</section>
+
+<div class="cta-strip">
+  <div>
+    <h2>READY TO WRITE YOUR<br>NEXT CHAPTER?</h2>
+    <p>We're actively recruiting junior and trainee developers right now.</p>
+  </div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap">
+    <a href="careers.html" class="btn btn-dark">See Open Roles</a>
+    <a href="apply.html" class="btn btn-ghost" style="border-color:#000;color:#000;background:rgba(0,0,0,.1)">Apply Now</a>
+  </div>
+</div>
+
+<section class="courses-sec">
+  <div class="eyebrow">Learn &amp; Grow</div>
+  <h2 class="sec-title">COURSES WE <span class="accent">RECOMMEND</span></h2>
+  <p class="sec-body" style="color:var(--muted)">Not quite ready to apply? These courses will get your skills to the level we're looking for.</p>
+  <div class="cgrid">
+    <div class="cc reveal"><div class="cprov">freeCodeCamp</div><div class="cname">Responsive Web Design Certification</div><a href="https://www.freecodecamp.org/learn/2022/responsive-web-design/" target="_blank" class="clink">Start Free →</a></div>
+    <div class="cc reveal"><div class="cprov">The Odin Project</div><div class="cname">Full Stack JavaScript Path</div><a href="https://www.theodinproject.com/paths/full-stack-javascript" target="_blank" class="clink">Start Free →</a></div>
+    <div class="cc reveal"><div class="cprov">Coursera</div><div class="cname">Meta Front-End Developer Professional Certificate</div><a href="https://www.coursera.org/professional-certificates/meta-front-end-developer" target="_blank" class="clink">Explore →</a></div>
+    <div class="cc reveal"><div class="cprov">Udemy</div><div class="cname">The Complete Web Developer Bootcamp</div><a href="https://www.udemy.com/course/the-complete-web-development-bootcamp/" target="_blank" class="clink">Explore →</a></div>
+    <div class="cc reveal"><div class="cprov">Frontend Masters</div><div class="cname">Complete Intro to Web Development v3</div><a href="https://frontendmasters.com/courses/web-development-v3/" target="_blank" class="clink">Explore →</a></div>
+    <div class="cc reveal"><div class="cprov">W3Schools</div><div class="cname">Web Developer Tutorials &amp; Certifications</div><a href="https://www.w3schools.com/" target="_blank" class="clink">Start Free →</a></div>
+  </div>
+</section>
+
+<footer>
+  <div><a href="index.html" class="ft">Hot <span>Beans</span></a><p class="ft-tag">Crafting digital experiences that<br>refuse to be ordinary. Based in the UK.</p></div>
+  <nav class="fnav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="careers.html">Careers</a>
+    <a href="apply.html">Apply</a>
+  </nav>
+  <div class="fbot">
+    <span>© 2025 Hot Beans Web Ltd. All rights reserved.</span>
+    <span>Made with <span class="amber">♥</span> in the UK</span>
+  </div>
+</footer>
+<script>
+function toggleMenu(){document.getElementById('mob').classList.toggle('open')}
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('visible');obs.unobserve(el.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>

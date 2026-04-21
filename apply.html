@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Apply — Hot Beans Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0A0A0A;--surface:#111111;--card:#181818;--amber:#F5A623;--amber-dim:#C4841A;--text:#F0EDE8;--muted:#7A7570;--border:#252525;--green:#4ADE80;--red:#F87171}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(10,10,10,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.logo span{color:var(--amber)}
+.nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center}
+.nav-links a{font-size:.85rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-cta{background:var(--amber) !important;color:#000 !important;padding:.5rem 1.4rem !important;border-radius:4px;font-weight:600 !important}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.ham span{display:block;width:24px;height:2px;background:var(--text)}
+.mob{display:none;position:fixed;top:65px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:1.5rem 2rem;flex-direction:column;gap:1.2rem;z-index:199}
+.mob.open{display:flex}
+.mob a{font-size:.95rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-decoration:none;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.mob a:hover{color:var(--text)}
+
+.page-hero{padding:9rem 3.5rem 5rem;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.page-hero::before{content:'APPLY';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:22vw;letter-spacing:.04em;color:rgba(245,166,35,.04);line-height:1;pointer-events:none;user-select:none}
+.ph-tag{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
+.ph-tag::before{content:'';width:24px;height:1.5px;background:var(--amber)}
+.page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,8rem);line-height:.9;letter-spacing:.02em;margin-bottom:2rem}
+.page-hero h1 .accent{color:var(--amber)}
+.ph-intro{max-width:600px;font-size:1rem;line-height:1.8;color:var(--muted)}
+.ph-intro strong{color:var(--text);font-weight:500}
+
+/* FORM LAYOUT */
+.apply-section{
+  padding:6rem 3.5rem;
+  display:grid;grid-template-columns:1fr 380px;
+  gap:5rem;align-items:start;
+}
+
+/* FORM */
+.form-wrap{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:3rem;
+}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.04em;margin-bottom:.4rem}
+.form-sub{font-size:.85rem;color:var(--muted);margin-bottom:2.5rem;line-height:1.6}
+
+.form-section-title{
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;
+  color:var(--amber);margin:2rem 0 1.2rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.form-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.2rem}
+.form-group label{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.form-group label .req{color:var(--amber);margin-left:.2rem}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:.8rem 1rem;
+  font-family:'Outfit',sans-serif;font-size:.9rem;
+  color:var(--text);
+  transition:border-color .2s,box-shadow .2s;
+  outline:none;
+  width:100%;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:var(--amber);
+  box-shadow:0 0 0 3px rgba(245,166,35,.1);
+}
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error{border-color:var(--red)}
+.form-group .error-msg{font-size:.75rem;color:var(--red);display:none}
+.form-group.has-error .error-msg{display:block}
+.form-group select option{background:var(--card)}
+.form-group textarea{resize:vertical;min-height:100px}
+
+/* CHECKBOXES */
+.check-group{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem}
+.check-item{display:flex;align-items:flex-start;gap:.8rem;cursor:pointer}
+.check-item input[type="checkbox"]{
+  width:18px;height:18px;flex-shrink:0;margin-top:.1rem;
+  accent-color:var(--amber);cursor:pointer;
+}
+.check-label{font-size:.85rem;line-height:1.5;color:var(--muted)}
+.check-label strong{color:var(--text);font-weight:500}
+
+/* RADIO */
+.radio-group{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem}
+.radio-item{
+  display:flex;align-items:center;gap:.8rem;cursor:pointer;
+  background:var(--surface);border:1px solid var(--border);border-radius:6px;
+  padding:.9rem 1.1rem;transition:border-color .2s;
+}
+.radio-item:has(input:checked){border-color:var(--amber);background:rgba(245,166,35,.04)}
+.radio-item input[type="radio"]{accent-color:var(--amber);cursor:pointer}
+.radio-label{font-size:.88rem;font-weight:500}
+
+/* UPLOAD */
+.upload-area{
+  border:2px dashed var(--border);border-radius:8px;padding:2rem;
+  text-align:center;cursor:pointer;transition:border-color .2s,background .2s;
+  position:relative;margin-bottom:1.2rem;
+}
+.upload-area:hover,.upload-area.drag{border-color:var(--amber);background:rgba(245,166,35,.03)}
+.upload-icon{font-size:2rem;margin-bottom:.6rem}
+.upload-text{font-size:.88rem;color:var(--muted);line-height:1.6}
+.upload-text strong{color:var(--text)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-file-name{font-size:.8rem;color:var(--amber);margin-top:.5rem;display:none}
+
+/* SUBMIT */
+.btn-submit{
+  width:100%;padding:1rem;background:var(--amber);color:#000;
+  border:none;border-radius:6px;font-family:'Outfit',sans-serif;
+  font-size:.95rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;margin-top:1.5rem;
+}
+.btn-submit:hover{background:var(--amber-dim);transform:translateY(-2px)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.form-disclaimer{font-size:.75rem;color:var(--muted);text-align:center;margin-top:1rem;line-height:1.6}
+
+/* SUCCESS STATE */
+.success-msg{
+  display:none;
+  background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);
+  border-radius:10px;padding:2.5rem;text-align:center;margin-top:2rem;
+}
+.success-msg.show{display:block}
+.success-icon{font-size:3rem;margin-bottom:1rem}
+.success-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--green);margin-bottom:.5rem}
+.success-text{font-size:.9rem;color:var(--muted);line-height:1.7}
+
+/* SIDEBAR */
+.sidebar{}
+.sidebar-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:2rem;margin-bottom:1.5rem;
+}
+.sidebar-card:hover{border-color:rgba(245,166,35,.3)}
+.sc-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;margin-bottom:1rem;color:var(--amber)}
+.sc-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.sc-list li{font-size:.83rem;line-height:1.6;color:var(--muted);padding-left:1.2rem;position:relative}
+.sc-list li::before{content:'→';position:absolute;left:0;color:var(--amber);font-size:.75rem}
+.sc-list li strong{color:var(--text);font-weight:500}
+.process-step{display:flex;gap:1rem;align-items:flex-start;padding:.8rem 0;border-bottom:1px solid var(--border)}
+.process-step:last-child{border-bottom:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--amber);line-height:1;flex-shrink:0;width:28px}
+.step-body{}
+.step-title{font-weight:600;font-size:.88rem;margin-bottom:.2rem}
+.step-desc{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 3.5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.ft{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:var(--text);text-decoration:none}
+.ft span{color:var(--amber)}
+.ft-tag{font-size:.82rem;color:var(--muted);margin-top:.4rem;line-height:1.6}
+.fnav{display:flex;gap:2rem;flex-wrap:wrap;justify-content:flex-end}
+.fnav a{font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.fnav a:hover{color:var(--text)}
+.fbot{grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.5rem;margin-top:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.75rem;color:var(--muted)}
+.fbot .amber{color:var(--amber)}
+
+@media(max-width:1100px){.apply-section{grid-template-columns:1fr;gap:3rem}}
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .page-hero{padding:7rem 1.5rem 3rem}
+  .page-hero::before{display:none}
+  .apply-section{padding:4rem 1.5rem}
+  .form-wrap{padding:2rem 1.5rem}
+  .form-row{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr}
+  .fnav{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Hot <span>Beans</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="careers.html">Careers</a></li>
+    <li><a href="apply.html" class="nav-cta active">Apply Now</a></li>
+  </ul>
+  <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="careers.html">Careers</a>
+  <a href="apply.html">Apply Now</a>
+</div>
+
+<section class="page-hero">
+  <div class="ph-tag">Join The Team</div>
+  <h1>YOUR<br><span class="accent">APPLICATION.</span></h1>
+  <p class="ph-intro">We review every application <strong>personally</strong>. There's no automated filtering here — a real developer at Hot Beans reads what you send us. So take your time and show us who you are.</p>
+</section>
+
+<section class="apply-section">
+
+  <!-- MAIN FORM -->
+  <div>
+    <div class="form-wrap" id="formWrap">
+      <div class="form-title">Application Form</div>
+      <p class="form-sub">Fields marked with <span style="color:var(--amber)">*</span> are required. Takes about 10 minutes to complete.</p>
+
+      <form id="appForm" novalidate>
+
+        <!-- PERSONAL -->
+        <div class="form-section-title">Personal Details</div>
+
+        <div class="form-row">
+          <div class="form-group" id="fg-firstName">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" name="firstName" placeholder="e.g. Jamie" autocomplete="given-name"/>
+            <span class="error-msg">Please enter your first name</span>
+          </div>
+          <div class="form-group" id="fg-lastName">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" name="lastName" placeholder="e.g. Rhodes" autocomplete="family-name"/>
+            <span class="error-msg">Please enter your last name</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" id="fg-email">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email"/>
+            <span class="error-msg">Please enter a valid email</span>
+          </div>
+          <div class="form-group" id="fg-phone">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+44 7700 000000" autocomplete="tel"/>
+            <span class="error-msg">Please enter your phone number</span>
+          </div>
+        </div>
+
+        <div class="form-group" id="fg-location">
+          <label>Location (City / Town) <span class="req">*</span></label>
+          <input type="text" id="location" name="location" placeholder="e.g. Manchester, UK"/>
+          <span class="error-msg">Please enter your location</span>
+        </div>
+
+        <div class="form-group" id="fg-portfolio">
+          <label>Portfolio / GitHub URL</label>
+          <input type="url" id="portfolio" name="portfolio" placeholder="https://github.com/yourusername"/>
+        </div>
+
+        <!-- ROLE -->
+        <div class="form-section-title">Role &amp; Experience</div>
+
+        <div class="form-group" id="fg-role">
+          <label>Which role are you applying for? <span class="req">*</span></label>
+          <select id="role" name="role">
+            <option value="">— Select a role —</option>
+            <option value="junior-frontend">Junior Frontend Developer</option>
+            <option value="trainee-fullstack">Trainee Full-Stack Developer</option>
+            <option value="junior-ui">Junior UI / CSS Developer</option>
+            <option value="general">General / Speculative Application</option>
+          </select>
+          <span class="error-msg">Please select a role</span>
+        </div>
+
+        <div class="form-group" id="fg-experience">
+          <label>Years of coding experience <span class="req">*</span></label>
+          <select id="experience" name="experience">
+            <option value="">— Select —</option>
+            <option value="under1">Less than 1 year</option>
+            <option value="1-2">1–2 years</option>
+            <option value="2-3">2–3 years</option>
+            <option value="3plus">3+ years</option>
+          </select>
+          <span class="error-msg">Please select your experience level</span>
+        </div>
+
+        <div class="form-group">
+          <label>Skills &amp; Technologies (select all that apply)</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" name="skills" value="html-css"/><span class="check-label"><strong>HTML &amp; CSS</strong> — Semantic HTML5, CSS3, responsive design</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="javascript"/><span class="check-label"><strong>JavaScript</strong> — ES6+, DOM manipulation, async/await</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="react"/><span class="check-label"><strong>React</strong> — Components, hooks, state management</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="vue"/><span class="check-label"><strong>Vue.js</strong> — Vue 3, Composition API</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="nodejs"/><span class="check-label"><strong>Node.js</strong> — Express, REST APIs</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="python"/><span class="check-label"><strong>Python</strong> — Flask, Django, scripting</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="sql"/><span class="check-label"><strong>SQL / Databases</strong> — MySQL, PostgreSQL, MongoDB</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="git"/><span class="check-label"><strong>Git / Version Control</strong> — GitHub, GitLab, branching</span></label>
+            <label class="check-item"><input type="checkbox" name="skills" value="figma"/><span class="check-label"><strong>Figma / Design Tools</strong> — Reading and working with design files</span></label>
+          </div>
+        </div>
+
+        <!-- QUALIFICATIONS -->
+        <div class="form-section-title">Qualifications &amp; Training</div>
+
+        <div class="form-group" id="fg-qualification">
+          <label>Highest relevant qualification <span class="req">*</span></label>
+          <select id="qualification" name="qualification">
+            <option value="">— Select —</option>
+            <option value="gcse">GCSEs including Computing / IT</option>
+            <option value="alevel">A-Level Computer Science or IT</option>
+            <option value="btec-l3">BTec Level 3 in IT / Computing</option>
+            <option value="diploma-l3">Level 3 Web Development Diploma</option>
+            <option value="hnc-hnd">HNC / HND in Computing</option>
+            <option value="bootcamp">Coding Bootcamp Certificate</option>
+            <option value="degree">BSc / BEng Computer Science or similar</option>
+            <option value="self-taught">Self-Taught (portfolio-based)</option>
+            <option value="other">Other (describe in cover letter)</option>
+          </select>
+          <span class="error-msg">Please select your qualification</span>
+        </div>
+
+        <div class="form-group" id="fg-institution">
+          <label>Institution / School / Platform <span class="req">*</span></label>
+          <input type="text" id="institution" name="institution" placeholder="e.g. Manchester College, freeCodeCamp, Makers Academy"/>
+          <span class="error-msg">Please enter your institution</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year of completion (or expected)</label>
+            <input type="number" id="gradYear" name="gradYear" placeholder="e.g. 2024" min="2015" max="2027"/>
+          </div>
+          <div class="form-group">
+            <label>Grade / Result (if applicable)</label>
+            <input type="text" id="grade" name="grade" placeholder="e.g. Merit, 2:1, Distinction"/>
+          </div>
+        </div>
+
+        <!-- COVER LETTER -->
+        <div class="form-section-title">Tell Us About Yourself</div>
+
+        <div class="form-group" id="fg-coverLetter">
+          <label>Cover Letter / Personal Statement <span class="req">*</span></label>
+          <textarea id="coverLetter" name="coverLetter" rows="7" placeholder="Tell us why you want to join Hot Beans, what drives your passion for web development, and what you'd bring to the team. There are no wrong answers — we want to hear the real you. (min. 100 words)"></textarea>
+          <span class="error-msg">Please write at least 50 characters</span>
+        </div>
+
+        <div class="form-group" id="fg-projects">
+          <label>Tell us about a project you're proud of <span class="req">*</span></label>
+          <textarea id="projects" name="projects" rows="4" placeholder="What did you build? What technologies did you use? What was the hardest part? Link to it if you can."></textarea>
+          <span class="error-msg">Please describe a project</span>
+        </div>
+
+        <!-- AVAILABILITY -->
+        <div class="form-section-title">Availability</div>
+
+        <div class="form-group" id="fg-availability">
+          <label>When can you start? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="availability" value="immediately"/> <span class="radio-label">Immediately / within 2 weeks</span></label>
+            <label class="radio-item"><input type="radio" name="availability" value="1month"/> <span class="radio-label">Within 1 month</span></label>
+            <label class="radio-item"><input type="radio" name="availability" value="3months"/> <span class="radio-label">1–3 months notice required</span></label>
+            <label class="radio-item"><input type="radio" name="availability" value="flexible"/> <span class="radio-label">Flexible — let's discuss</span></label>
+          </div>
+          <span class="error-msg" id="availability-error" style="display:none">Please select your availability</span>
+        </div>
+
+        <!-- CV UPLOAD -->
+        <div class="form-section-title">CV / Résumé</div>
+
+        <div class="upload-area" id="uploadArea"
+          ondragover="handleDragOver(event)"
+          ondragleave="handleDragLeave(event)"
+          ondrop="handleDrop(event)">
+          <input type="file" id="cvUpload" name="cvUpload" accept=".pdf,.doc,.docx" onchange="handleFileChange(event)"/>
+          <div class="upload-icon">📄</div>
+          <p class="upload-text"><strong>Drop your CV here</strong> or click to browse<br>PDF, DOC or DOCX — max 5MB</p>
+          <p class="upload-file-name" id="fileName"></p>
+        </div>
+
+        <!-- CONSENT -->
+        <div class="form-section-title">Almost Done</div>
+
+        <div class="form-group" id="fg-consent">
+          <div class="check-group">
+            <label class="check-item">
+              <input type="checkbox" id="consent" name="consent"/>
+              <span class="check-label">I confirm that the information provided in this application is accurate and complete. I understand that any false information may result in my application being rejected. <span style="color:var(--amber)">*</span></span>
+            </label>
+          </div>
+          <span class="error-msg" id="consent-error" style="display:none">You must confirm this to submit</span>
+        </div>
+
+        <div class="form-group">
+          <div class="check-group">
+            <label class="check-item">
+              <input type="checkbox" id="updates" name="updates"/>
+              <span class="check-label">I'd like to receive updates about future roles at Hot Beans Web (optional)</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Submit My Application →
+        </button>
+        <p class="form-disclaimer">We aim to respond to all applications within 5 working days.<br>Your data is handled in accordance with our privacy policy.</p>
+      </form>
+
+      <!-- SUCCESS -->
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Application Received!</div>
+        <p class="success-text">Thank you for applying to Hot Beans Web. A real human developer on our team will read your application and get back to you within 5 working days.<br><br>In the meantime, feel free to browse our <a href="careers.html" style="color:var(--amber)">open roles</a> or <a href="about.html" style="color:var(--amber)">learn more about us</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sc-title">What We Look For</div>
+      <ul class="sc-list">
+        <li><strong>A portfolio</strong> — real projects, however small</li>
+        <li><strong>Genuine curiosity</strong> — you read docs for fun</li>
+        <li><strong>A growth mindset</strong> — you embrace feedback</li>
+        <li><strong>Communication</strong> — you can explain your thinking</li>
+        <li><strong>Relevant qualification</strong> or demonstrable self-teaching</li>
+        <li><strong>HTML, CSS &amp; JavaScript</strong> fundamentals at a minimum</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sc-title">Our Hiring Process</div>
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-body"><div class="step-title">Application Review</div><p class="step-desc">A real developer reads your application. No automated filters. Takes up to 5 working days.</p></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-body"><div class="step-title">Intro Call (30 min)</div><p class="step-desc">A relaxed video call with one of our team. We want to know who you are, not just what you've built.</p></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-body"><div class="step-title">Technical Task</div><p class="step-desc">A small, take-home challenge. Nothing ridiculous — we respect your time. Max 2–3 hours.</p></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-body"><div class="step-title">Team Interview</div><p class="step-desc">Meet more of the team. Walk through your technical task, ask us anything, see the studio.</p></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">5</div>
+        <div class="step-body"><div class="step-title">Offer</div><p class="step-desc">If we're both excited, we'll make you an offer. Simple as that.</p></div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sc-title">Got Questions?</div>
+      <p style="font-size:.83rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">Not sure if you're a good fit? Drop us an email and we'll be honest with you.</p>
+      <a href="mailto:careers@hotbeans.co.uk" style="font-size:.83rem;color:var(--amber);font-weight:600;text-decoration:none">careers@hotbeans.co.uk →</a>
+    </div>
+  </aside>
+
+</section>
+
+<footer>
+  <div><a href="index.html" class="ft">Hot <span>Beans</span></a><p class="ft-tag">Crafting digital experiences that<br>refuse to be ordinary. Based in the UK.</p></div>
+  <nav class="fnav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="careers.html">Careers</a>
+    <a href="apply.html">Apply</a>
+  </nav>
+  <div class="fbot">
+    <span>© 2025 Hot Beans Web Ltd. All rights reserved.</span>
+    <span>Made with <span class="amber">♥</span> in the UK</span>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){document.getElementById('mob').classList.toggle('open')}
+
+// Pre-fill role from URL param
+window.addEventListener('DOMContentLoaded',()=>{
+  const params=new URLSearchParams(window.location.search);
+  const role=params.get('role');
+  if(role){const sel=document.getElementById('role');if(sel)sel.value=role}
+});
+
+// File upload
+function handleFileChange(e){
+  const file=e.target.files[0];
+  if(file){
+    const fn=document.getElementById('fileName');
+    fn.textContent='✓ '+file.name;fn.style.display='block';
+  }
+}
+function handleDragOver(e){e.preventDefault();document.getElementById('uploadArea').classList.add('drag')}
+function handleDragLeave(){document.getElementById('uploadArea').classList.remove('drag')}
+function handleDrop(e){
+  e.preventDefault();document.getElementById('uploadArea').classList.remove('drag');
+  const file=e.dataTransfer.files[0];
+  if(file){document.getElementById('fileName').textContent='✓ '+file.name;document.getElementById('fileName').style.display='block'}
+}
+
+// Validation helpers
+function setError(id,show){
+  const fg=document.getElementById('fg-'+id);
+  if(!fg)return;
+  const inp=document.getElementById(id);
+  fg.classList.toggle('has-error',show);
+  if(inp)inp.classList.toggle('error',show);
+}
+
+function validateEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+
+// Form submit
+document.getElementById('appForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  let valid=true;
+
+  // Required text fields
+  const fields=[
+    {id:'firstName',test:v=>v.trim().length>0},
+    {id:'lastName',test:v=>v.trim().length>0},
+    {id:'email',test:v=>validateEmail(v)},
+    {id:'phone',test:v=>v.trim().length>6},
+    {id:'location',test:v=>v.trim().length>0},
+    {id:'role',test:v=>v!==''},
+    {id:'experience',test:v=>v!==''},
+    {id:'qualification',test:v=>v!==''},
+    {id:'institution',test:v=>v.trim().length>0},
+    {id:'coverLetter',test:v=>v.trim().length>=50},
+    {id:'projects',test:v=>v.trim().length>=20},
+  ];
+
+  fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    const ok=f.test(el?el.value:'');
+    setError(f.id,!ok);
+    if(!ok)valid=false;
+  });
+
+  // Radio availability
+  const avail=document.querySelector('input[name="availability"]:checked');
+  const availErr=document.getElementById('availability-error');
+  if(!avail){availErr.style.display='block';valid=false}else{availErr.style.display='none'}
+
+  // Consent
+  const consentEl=document.getElementById('consent');
+  const consentErr=document.getElementById('consent-error');
+  if(!consentEl.checked){consentErr.style.display='block';valid=false}else{consentErr.style.display='none'}
+
+  if(!valid){
+    const firstErr=document.querySelector('.has-error, .error-msg[style*="block"]');
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  // Simulate submission
+  const btn=document.getElementById('submitBtn');
+  btn.textContent='Submitting…';btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('appForm').style.display='none';
+    document.getElementById('successMsg').classList.add('show');
+    document.getElementById('successMsg').scrollIntoView({behavior:'smooth'});
+  },1400);
+});
+
+// Live validation clearing
+document.querySelectorAll('input,select,textarea').forEach(el=>{
+  el.addEventListener('input',()=>{
+    const fg=document.getElementById('fg-'+el.id);
+    if(fg&&fg.classList.contains('has-error')){
+      fg.classList.remove('has-error');el.classList.remove('error');
+    }
+  });
+});
+</script>
+</body>
+</html>
